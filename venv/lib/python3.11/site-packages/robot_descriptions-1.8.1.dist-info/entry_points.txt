@@ -1,0 +1,3 @@
+[console_scripts]
+robot_descriptions=robot_descriptions._command_line:main
+
