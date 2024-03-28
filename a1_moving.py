@@ -22,6 +22,8 @@ data.qpos[0] = 0.
 data.qpos[1] = 0.
 data.qpos[2] = 0.3
 
+print("data.qpos.sh", data.qpos.shape)
+
 mujoco.mj_resetData(model, data)  
 mujoco.mj_step(model, data)
 
@@ -40,7 +42,6 @@ with mujoco.viewer.launch_passive(model, data) as viewer:
             data.qpos[2] = 0.3
             data.qpos[3:7] = quaternion[i]
             data.qpos[7:] = joint_angles[i]
-            print("Current base position:", data.qpos[0:3])
 
             mujoco.mj_kinematics(model, data)
             viewer.sync()
