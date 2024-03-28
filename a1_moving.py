@@ -22,8 +22,6 @@ data.qpos[0] = 0.
 data.qpos[1] = 0.
 data.qpos[2] = 0.3
 
-print("data.qpos.sh", data.qpos.shape)
-
 mujoco.mj_resetData(model, data)  
 mujoco.mj_step(model, data)
 
@@ -45,4 +43,3 @@ with mujoco.viewer.launch_passive(model, data) as viewer:
 
             mujoco.mj_kinematics(model, data)
             viewer.sync()
-
