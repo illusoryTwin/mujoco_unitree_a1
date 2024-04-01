@@ -31,7 +31,7 @@ from mujoco.glfw import glfw
 import numpy as np
 import os
 
-xml_path = 'xml/projectile.xml'
+xml_path = 'example/xml/projectile.xml'
 
 #xml file (assumes this is in the same folder as this file)
 simend = 10 #simulation time
@@ -60,11 +60,19 @@ def controller(model, data):
     data.xfrc_applied[1][2] = -c*vz*v;
 
 
+model = mj.MjModel.from_xml_path(xml_path)  # MuJoCo model
+data = mj.MjData(model)    
+init_controller(model,data)
+data.qpos[0] = 0
+data.qpos[2] = 0.1
+data.qvel[0] = 2
+data.qvel[2] = 5
 
-#get the full path
-dirname = os.path.dirname(__file__)
-abspath = os.path.join(dirname + "/" + xml_path)
-xml_path = abspath
+
+# #get the full path
+# dirname = os.path.dirname(__file__)
+# abspath = os.path.join(dirname + "/" + xml_path)
+# xml_path = abspath
 
 # MuJoCo data structures
 model = mj.MjModel.from_xml_path(xml_path)  # MuJoCo model
