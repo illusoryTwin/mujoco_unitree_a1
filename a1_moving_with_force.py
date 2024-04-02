@@ -3,7 +3,7 @@ import mujoco
 import mujoco.viewer
 import numpy as np
 
-SIMULATION_TIME = 10
+SIMULATION_TIME = 50
 
 XML_FILE = 'data/a1/xml/a1.xml'
 
@@ -14,6 +14,7 @@ data_file = 'data/a1/walk/stand_twist.csv'
 data_array = np.genfromtxt(data_file, delimiter=',', skip_header=100, skip_footer=100)
 
 timespan = data_array[:, 0] - data_array[0, 0]
+print("timespan", timespan)
 quaternion = data_array[:, 1:5]
 joint_angles =  data_array[:, 11:23]
 
@@ -28,6 +29,7 @@ mujoco.mj_step(model, data)
 
 with mujoco.viewer.launch_passive(model, data) as viewer:
     start = time.time()
+    data.qfrc_applied = np.sin(data.time)
 
     while viewer.is_running() and time.time() - start < SIMULATION_TIME:
         step_start = time.time()
@@ -35,24 +37,24 @@ with mujoco.viewer.launch_passive(model, data) as viewer:
         for i in range(len(timespan)):
 
             mujoco.mj_step(model, data)
+            # data.qfrc_applied = np.sin(data.time)
+
             data.qpos[0] = 0.
             data.qpos[1] = 0.
             data.qpos[2] = 0.3
-            # data.qpos[3:7] = quaternion[i]
+            data.qpos[3:7] = quaternion[i]
             data.qpos[7:] = joint_angles[i]
 
+            # data.qfrc_applied = np.sin(data.time)
+            mujoco.mj_step(model, data) 
 
-            data.qfrc_applied= data.qpos[3]*3
-
-            # data.qfrc_applied = 1000
-            # data.xfrc_applied[0][3:] = 100
-            # data.xfrc_applied[1][3:] = 100
-            # data.xfrc_applied[1][:3] =100
-            # data.xfrc_applied[2][:3] = 100
-
-            # print(data.xfrc_applied.shape)
             mujoco.mj_kinematics(model, data)
             viewer.sync()
+
+
+
+
+
 
 
 
