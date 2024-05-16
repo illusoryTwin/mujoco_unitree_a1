@@ -44,4 +44,5 @@ with mujoco.viewer.launch_passive(model, data) as viewer:
             data.qpos[2] = 0.3
    
             data.ctrl = [100, -100, 100, 0, 0, 100, -100, 100, 0, 0, 10, 10]
+            
             viewer.sync()
