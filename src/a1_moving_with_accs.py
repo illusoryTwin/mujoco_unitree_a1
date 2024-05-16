@@ -10,7 +10,7 @@ XML_FILE = 'data/a1/xml/a1.xml'
 model = mujoco.MjModel.from_xml_path(XML_FILE)
 data = mujoco.MjData(model)
 
-data_file = 'data/a1/walk/random_cartesian.csv'
+data_file = 'data/a1/walk/stand_twist.csv'
 data_array = np.genfromtxt(data_file, delimiter=',', skip_header=100, skip_footer=100)
 
 timespan = data_array[:, 0] - data_array[0, 0]
@@ -40,6 +40,11 @@ with mujoco.viewer.launch_passive(model, data) as viewer:
             data.qpos[2] = 0.3
             data.qpos[3:7] = quaternion[i]
             data.qpos[7:] = joint_angles[i]
+
+            # Access accelerations
+            accelerations = data.qacc
+
+            print("Accelerations:", accelerations)
 
             mujoco.mj_kinematics(model, data)
             viewer.sync()
