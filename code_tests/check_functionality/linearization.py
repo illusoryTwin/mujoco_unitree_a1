@@ -57,13 +57,15 @@ with mujoco.viewer.launch_passive(model, data) as viewer:
 
             nu = model.nu
             nv = model.nv
+
         # Allocate the A and B matrices, compute them.
             A = np.zeros((2*nv, 2*nv))
             B = np.zeros((2*nv, nu))
             epsilon = 1e-6
             centered = True
             mujoco.mjd_transitionFD(model, data, epsilon, centered, A, B, None, None)
-            print("A", A)
+            print("A", A.shape) # (36, 36)
+            print("B", B.shape) # (36, 12)
             
-            
+
             viewer.sync()
