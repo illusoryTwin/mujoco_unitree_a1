@@ -45,49 +45,15 @@ with mujoco.viewer.launch_passive(model, data) as viewer:
             # data.qpos[3:7] = quaternion[i]
             data.qpos[7:] = joint_angles[0]
 
+            print("len(data.qacc)", len(data.qacc))
+            print("len(data.qvel)", len(data.qvel))
 
-            # data.qacc = [0]*18
-            # mujoco.mj_inverse(model, data)
-            # data.ctrl = data.qfrc_inverse[:12]
-
-
-
-            # # another method
             mujoco.mj_forward(model, data)
             data.qacc = 0
             mujoco.mj_inverse(model, data)
+
             print("data.qfrc_inverse", data.qfrc_inverse)
 
-            # # define control and configuration to linearize around
-            # print(data.qfrc_actuator)
-
-
-
-
-
-            print("len(data.qM.shape)", len(data.qM)) # problem here
-
-            # print("len(data.qfrc_bias)", len(data.qfrc_bias))
-
-            # print("data.qfrc_applied", data.qfrc_applied)
-            # print("data.qfrc_inverse", data.qfrc_inverse)
-
-            # print("len(data.qpos)", len(data.qvel))
-            # print("len(data.qfrc_inverse[:12])", len(data.qfrc_inverse[:12]))
-            # print("len(data.ctrl)", len(data.ctrl))
-            # print(data.qfrc_inverse)
-
-            nu = model.nu
-            nv = model.nv
-
-        # Allocate the A and B matrices, compute them.
-            A = np.zeros((2*nv, 2*nv))
-            B = np.zeros((2*nv, nu))
-            epsilon = 1e-6
-            centered = True
-            mujoco.mjd_transitionFD(model, data, epsilon, centered, A, B, None, None)
-            # print("A", A.shape) # (36, 36)
-            # print("B", B.shape) # (36, 12)
-            
 
             viewer.sync()
+                        
