@@ -50,10 +50,11 @@ with mujoco.viewer.launch_passive(model, data) as viewer:
             mujoco.mj_inverse(model, data)
             # data.ctrl = data.qfrc_inverse[:12]
 
-            print("len(data.qpos)", len(data.qvel))
-            print("len(data.qfrc_inverse[:12])", len(data.qfrc_inverse[:12]))
-            print("len(data.ctrl)", len(data.ctrl))
-            print(data.qfrc_inverse)
+            print("len(data.qpos)", len(data.qpos))
+            print("len(data.qfrc_inverse)", len(data.qfrc_inverse))
 
+            print("len(data.qfrc_applied )", len(data.qfrc_applied ))
+            print("len(data.xfrc_applied)", len(data.xfrc_applied))
+            print("len(data.qfrc_actuator)", len(data.qfrc_actuator))
             
             viewer.sync()

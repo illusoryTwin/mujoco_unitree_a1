@@ -47,16 +47,9 @@ with mujoco.viewer.launch_passive(model, data) as viewer:
 
 
             # data.qacc = [0]*18
-            # mujoco.mj_inverse(model, data)
+            mujoco.mj_inverse(model, data)
             # data.ctrl = data.qfrc_inverse[:12]
 
-
-
-            # # another method
-            mujoco.mj_forward(model, data)
-            data.qacc = 0
-            mujoco.mj_inverse(model, data)
-            print("data.qfrc_inverse", data.qfrc_inverse)
 
             # # define control and configuration to linearize around
             # print(data.qfrc_actuator)

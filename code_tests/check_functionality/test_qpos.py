@@ -19,6 +19,8 @@ quaternion = data_array[:, 1:5]
 # linear_velocities = data_array[:, 5:8]
 joint_angles =  data_array[:, 11:23]
 
+print("len(data.qpos)", len(data.qpos))
+
 # Set initial position
 data.qpos[0] = 0.
 data.qpos[1] = 0.
@@ -42,24 +44,9 @@ with mujoco.viewer.launch_passive(model, data) as viewer:
             data.qpos[0] = 0.
             data.qpos[1] = 0.
             data.qpos[2] = 0.3
-            # data.qpos[3:7] = quaternion[i]
-            data.qpos[7:] = joint_angles[0]
-            
+            data.qpos[3:7] = quaternion[i]
+            data.qpos[7:] = joint_angles[i]
 
-   
-            print(model.nq)
-            mujoco.mj_inverse(model, data)
-      
-
-            # data.ctrl = [100, -100, 100, 0, 0, 100, -100, 100, 0, 0, 10, 10]
-
-            print("DoFs", model.nv) # number of DoF
-            print("passive", data.qfrc_passive, "len(data.qfrc_passive)", len(data.qfrc_passive)) # len = 18
-            print("actuator", data.qfrc_actuator, "len(data.qfrc_actuator", len(data.qfrc_actuator)) # nulls
-            print("applied", data.qfrc_applied, "len(data.qfrc_applied)", len(data.qfrc_applied)) # nulls
-
-            # # data.ctrl = [100, -100, 100, 0, 0, 100, -100, 100, 0, 0, 10, 10]
-            # data.ctrl = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
-            # # data.ctrl = [100]* 100 #, -100, 100, 0, 0, 100, -100, 100, 0, 0, 10, 10]
+            mujoco.mj_kinematics(model, data)
 
             viewer.sync()

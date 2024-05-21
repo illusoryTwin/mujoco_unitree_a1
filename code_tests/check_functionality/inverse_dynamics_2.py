@@ -19,6 +19,11 @@ quaternion = data_array[:, 1:5]
 # linear_velocities = data_array[:, 5:8]
 joint_angles =  data_array[:, 11:23]
 
+print("len(data.qpos)", len(data.qpos))
+print("len(data.qvel)", len(data.qvel))
+print("len(data.qacc)", len(data.qacc))
+
+
 # Set initial position
 data.qpos[0] = 0.
 data.qpos[1] = 0.
@@ -29,31 +34,37 @@ data.qpos[7:] = joint_angles[0]
 mujoco.mj_resetData(model, data)  
 mujoco.mj_step(model, data)
 
+
+
 print("Initial base position:", data.qpos[0:3])
 
-with mujoco.viewer.launch_passive(model, data) as viewer:
-    start = time.time()
+# with mujoco.viewer.launch_passive(model, data) as viewer:
+#     start = time.time()
 
-    while viewer.is_running() and time.time() - start < SIMULATION_TIME:
-        step_start = time.time()
+#     while viewer.is_running() and time.time() - start < SIMULATION_TIME:
+#         step_start = time.time()
     
-        for i in range(len(timespan)):
-            mujoco.mj_step(model, data)
-            data.qpos[0] = 0.
-            data.qpos[1] = 0.
-            data.qpos[2] = 0.3
-            # data.qpos[3:7] = quaternion[i]
-            data.qpos[7:] = joint_angles[0]
+#         for i in range(len(timespan)):
+#             mujoco.mj_step(model, data)
+#             data.qpos[0] = 0.
+#             data.qpos[1] = 0.
+#             data.qpos[2] = 0.3
+#             # data.qpos[3:7] = quaternion[i]
+#             data.qpos[7:] = joint_angles[0]
+#             print("len(data.qpos)", len(data.qpos))
 
-            print("len(data.qacc)", len(data.qacc))
-            print("len(data.qvel)", len(data.qvel))
+#             print("len(data.qacc)", len(data.qacc))
+#             print("len(data.qvel)", len(data.qvel))
+#             print(data.qfrc_applied)
+#             # print(len(data.xfrc_applied))
+#             print(data.qfrc_actuator)
 
-            mujoco.mj_forward(model, data)
-            data.qacc = 0
-            mujoco.mj_inverse(model, data)
+#             mujoco.mj_forward(model, data)
+#             data.qacc = 0
+#             mujoco.mj_inverse(model, data)
 
-            print("data.qfrc_inverse", data.qfrc_inverse)
+#             print("data.qfrc_inverse", data.qfrc_inverse)
 
 
-            viewer.sync()
+#             viewer.sync()
                         
