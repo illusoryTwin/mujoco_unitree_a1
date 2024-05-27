@@ -48,6 +48,8 @@ with mujoco.viewer.launch_passive(model, data) as viewer:
 
             data.qacc = 0
             mujoco.mj_inverse(model, data)
+
             data.ctrl = data.qfrc_inverse[:12]
-            
+            print(data.qfrc_inverse[:12])
+
             viewer.sync()

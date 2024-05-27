@@ -74,6 +74,7 @@ with mujoco.viewer.launch_passive(model, data) as viewer:
             nv = model.nv
 
         # Allocate the A and B matrices, compute them.
+        
             A = np.zeros((2*nv, 2*nv))
             B = np.zeros((2*nv, nu))
             epsilon = 1e-6

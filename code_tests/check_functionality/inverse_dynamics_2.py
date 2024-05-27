@@ -23,6 +23,8 @@ print("len(data.qpos)", len(data.qpos))
 print("len(data.qvel)", len(data.qvel))
 print("len(data.qacc)", len(data.qacc))
 
+print(data. qpos)
+print("data.ctrl", data.ctrl)
 
 # Set initial position
 data.qpos[0] = 0.
@@ -38,33 +40,44 @@ mujoco.mj_step(model, data)
 
 print("Initial base position:", data.qpos[0:3])
 
-# with mujoco.viewer.launch_passive(model, data) as viewer:
-#     start = time.time()
+with mujoco.viewer.launch_passive(model, data) as viewer:
+    start = time.time()
 
-#     while viewer.is_running() and time.time() - start < SIMULATION_TIME:
-#         step_start = time.time()
-    
-#         for i in range(len(timespan)):
-#             mujoco.mj_step(model, data)
-#             data.qpos[0] = 0.
-#             data.qpos[1] = 0.
-#             data.qpos[2] = 0.3
-#             # data.qpos[3:7] = quaternion[i]
-#             data.qpos[7:] = joint_angles[0]
-#             print("len(data.qpos)", len(data.qpos))
+    step_start = time.time()
+    data.qpos[0] = 0.
+    data.qpos[1] = 0.
+    data.qpos[2] = 0.3
+    data.qpos[3:7] = quaternion[0]
+    data.qpos[7:] = joint_angles[0]
+    mujoco.mj_step(model, data)
+    print("data.ctrl", data.ctrl)
+    data.qacc = 0
+    mujoco.mj_inverse(model, data)
+    qfrc0 = data.qfrc_inverse
 
-#             print("len(data.qacc)", len(data.qacc))
-#             print("len(data.qvel)", len(data.qvel))
-#             print(data.qfrc_applied)
-#             # print(len(data.xfrc_applied))
-#             print(data.qfrc_actuator)
+    ctrl0 = np.atleast_2d(qfrc0) @ np.linalg.pinv(data.actuator_moment)
+    ctrl0 = ctrl0.flatten()  # Save the ctrl setpoint.
 
-#             mujoco.mj_forward(model, data)
-#             data.qacc = 0
-#             mujoco.mj_inverse(model, data)
+    # while viewer.is_running() and time.time() - start < SIMULATION_TIME:
 
-#             print("data.qfrc_inverse", data.qfrc_inverse)
+    #     for i in range(len(timespan)):    
 
+    #         # print("len(data.qpos)", len(data.qpos))
 
-#             viewer.sync()
+    #         # print("len(data.qacc)", len(data.qacc))
+    #         # print("len(data.qvel)", len(data.qvel))
+    #         # print(data.qfrc_applied)
+    #         # # print(len(data.xfrc_applied))
+    #         # print(data.qfrc_actuator)
+
+            
+    #         print('control setpoint:', ctrl0)
+    #         print("data.qfrc_inverse", data.qfrc_inverse)
+    #         data.ctrl = ctrl0
+    #         # data.ctrl = np.random.randn(12)
+    #         # data.ctrl = [0]*12
+
+    #         mujoco.mj_step(model, data)
+
+    #         viewer.sync()
                         
